@@ -88,6 +88,23 @@ def main() -> None:
         print("⚡ Fast block production — optimal performance.")
     else:
         print("⚖️ Normal block time detected.")
+        # ✅ New: Add block time stability summary
+    try:
+        # Fetch timestamps for analysis of variation
+        diffs = []
+        for i in range(args.start_block, args.start_block + args.samples):
+            b = w3.eth.get_block(i)
+            p = w3.eth.get_block(i - 1)
+            diffs.append(b.timestamp - p.timestamp)
+        variation = max(diffs) - min(diffs)
+        if variation < 2:
+            print("🟢 Network Stability: Stable block production ⏱️")
+        elif variation < 5:
+            print("🟡 Network Stability: Slightly variable timing ⚖️")
+        else:
+            print("🔴 Network Stability: Volatile timing ⚠️")
+    except Exception:
+        print("⚠️ Could not compute stability analysis.")
 
     elapsed = round(time.time() - start, 2)
     print(f"✅ Completed in {elapsed:.2f}s")
