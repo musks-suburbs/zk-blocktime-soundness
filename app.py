@@ -21,6 +21,9 @@ def get_average_block_time(w3: Web3, start_block: int, sample_size: int = 5) -> 
     gas_ratios = []
 
     for i in range(start_block, start_block + sample_size):
+                # ✅ New: Print progress for each block fetched
+        print(f"🔍 Fetching block {i}...")
+
         try:
             block = w3.eth.get_block(i)
             prev_block = w3.eth.get_block(i - 1)
